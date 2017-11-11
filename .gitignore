@@ -3,3 +3,5 @@
 __pycache__/
 #files
 db.sqlite3
+#docs
+~$structions.docx
