@@ -1,2 +1,5 @@
 #Dirs
 .idea/
+__pycache__/
+#files
+db.sqlite3
