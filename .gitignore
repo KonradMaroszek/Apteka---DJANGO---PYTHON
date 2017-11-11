@@ -1,7 +1,8 @@
 #Dirs
 .idea/
+Apteka/apteka/migrations/
 __pycache__/
 #files
 db.sqlite3
 #docs
-~$structions.docx
+Docs/~*
