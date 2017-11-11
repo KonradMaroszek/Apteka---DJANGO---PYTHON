@@ -1,6 +1,6 @@
 #Dirs
 .idea/
-Apteka/apteka/migrations/
+Apteka/pharmacy/migrations/
 __pycache__/
 #files
 db.sqlite3
