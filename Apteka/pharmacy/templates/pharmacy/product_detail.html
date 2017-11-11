@@ -1,0 +1,15 @@
+{% if error_Message %}
+<p><strong> You are not loged in </strong></p>
+{% endif %}
+
+<img src ="{{product.product_logo}}">
+
+<h1>{{product.name}}</h1>
+<h3> {{product.description}}</h3>
+<h3> {{product.price}}</h3>
+<h3> {{product.amount}}</h3>
+
+<form action="{%url 'pharmacy:add_to_basket'%}" method="post">
+    {% csrf_token %}
+    <input type="submit" name="add_to_basket" value="{{product.id}}">
+</form>

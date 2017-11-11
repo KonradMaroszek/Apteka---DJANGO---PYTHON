@@ -1,7 +1,11 @@
+{% if error_Message %}
+<p><strong> You are not loged in </strong></p>
+{% endif %}
+
 {% if all_products %}
     <ul>
         {% for product in all_products%}
-            <li><a href="{{product.id}}/">{{product.name}}</a> </li>
+            <li><a href="{% url 'pharmacy:product_detail' product.id%}">{{product.name}}</a> </li>
         {% endfor %}
     </ul>
 {% else %}
