@@ -20,4 +20,4 @@ def add_to_basket(request):
     except (KeyError, ObjectDoesNotExist):
         return render(request, 'pharmacy/products.html', {'error_message' : "Cannot add this product to basket"})
     else:
-        return render(request, 'pharmacy/index.html', {'message': "Added new product"})
+        return render(request, 'pharmacy/basket.html', {'sucess_message': "Added new product to basket"})

@@ -11,5 +11,5 @@
 
 <form action="{%url 'pharmacy:add_to_basket'%}" method="post">
     {% csrf_token %}
-    <input type="submit" name="add_to_basket" value="{{product.id}}">
+    <button type="submit" name="add_to_basket" value="{{product.id}}">add To basket </button>
 </form>
