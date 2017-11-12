@@ -4,7 +4,8 @@ from .models import Product
 from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
-    return HttpResponse("<h1>This is APteka</h1>")
+    return render(request, 'pharmacy/index.html', {})
+
 
 def products(request):
     all_products = Product.objects.all()
