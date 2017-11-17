@@ -1,3 +1,7 @@
-{%if sucess_message%}
-<h1>{{sucess_message}}</h1>
-{%endif%}
+{% extends 'pharmacy/base.html' %}
+
+{% block body %}
+    {%if sucess_message%}
+        <h1>{{sucess_message}}</h1>
+    {%endif%}
+{% endblock %}

@@ -1,13 +1,18 @@
-{% if error_Message %}
-<p><strong> You are not loged in </strong></p>
-{% endif %}
+{% extends 'pharmacy/base.html' %}
+{% block title %}Products{% endblock %}
 
-{% if all_products %}
-    <ul>
-        {% for product in all_products%}
-            <li><a href="{% url 'pharmacy:product_detail' product.id%}">{{product.name}}</a> </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <h3>No products to display</h3>
-{% endif %}
+{% block body %}
+    {% if error_Message %}
+        <p><strong> You are not loged in </strong></p>
+    {% endif %}
+
+    {% if all_products %}
+        <ul>
+            {% for product in all_products%}
+                <li><a href="{% url 'pharmacy:product_detail' product.id%}">{{product.name}}</a> </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No products to display</h3>
+    {% endif %}
+{% endblock %}

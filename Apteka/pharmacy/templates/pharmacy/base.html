@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Pharmacy{% endblock %}</title>
+    {% load staticfiles %}
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'pharmacy/style.css'%}"/>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{%url 'pharmacy:index' %}">PHARMACY</a>
+        </div>
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="{%url 'pharmacy:products'%}">
+                        <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+                        &nbsp;
+                        All products
+                    </a>
+                </li>
+                <li class="">
+                      <a href="#">
+                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span>
+                        &nbsp;
+                        Promotions
+                    </a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search" method="get" action="#">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="query" value="">
+                </div>
+                <button type="submit" class="btn btn-default">Search</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                      <a href="#">
+                        <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        &nbsp;
+                        Add product
+                    </a>
+                </li>
+                <li class="">
+                      <a href="#">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                        &nbsp;
+                        Basket
+                    </a>
+                </li>
+                <li class="">
+                      <a href="#">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        &nbsp;
+                        Log out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block body %}
+{% endblock %}
+</body>
+</html>
+
+
