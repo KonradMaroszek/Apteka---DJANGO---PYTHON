@@ -3,17 +3,21 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.views import generic
+
+class ProductDetailView(generic.DetailView):
+    model = Product
+    template_name = 'pharmacy/product_detail.html'
+
+class AllProducts(generic.ListView):
+    template_name = 'pharmacy/products.html'
+    context_object_name = 'all_products'
+
+    def get_queryset(self):
+        return Product.objects.all()
+
 def index(request):
     return render(request, 'pharmacy/index.html', {})
-
-
-def products(request):
-    all_products = Product.objects.all()
-    return render(request, 'pharmacy/products.html', {'all_products' : all_products})
-
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'pharmacy/product_detail.html', {'product': product})
 
 def add_to_basket(request):
     try:
