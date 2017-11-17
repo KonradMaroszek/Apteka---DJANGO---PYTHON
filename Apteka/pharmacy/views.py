@@ -31,3 +31,11 @@ def add_to_basket(request):
 class CreateProduct(CreateView):
     model = Product
     fields = ['name', 'price', 'amount', 'product_logo', 'description']
+
+class UpdateProduct(UpdateView):
+    model = Product
+    fields = ['name', 'price', 'amount', 'product_logo', 'description']
+
+class DeleteProduct(DeleteView):
+    model = Product
+    success_url = reverse_lazy('pharmacy:products')

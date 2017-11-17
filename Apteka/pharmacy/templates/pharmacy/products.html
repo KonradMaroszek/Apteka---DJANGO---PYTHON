@@ -16,8 +16,14 @@
                             <h4>Name: &nbsp;{{ product.name }}</h4>
                             <h4>Price: &nbsp;{{ product.price }}</h4>
                             <a href="{% url 'pharmacy:product_detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
-                            <a href="" class="btn btn-primary btn-sm" role="button">Edit</a>
-                            <a href="" class="btn btn-primary btn-sm" role="button">Delete</a>
+                            <a href="{% url 'pharmacy:update_product' product.id %}" class="btn btn-primary btn-sm" role="button">Edit</a>
+                            <form action="{% url 'pharmacy:delete_product' product.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="album_id" value="{{ album.id }}" />
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
                         </div>
                     </div>
                 </div>
