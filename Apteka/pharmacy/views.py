@@ -20,6 +20,9 @@ class AllProducts(generic.ListView):
 def index(request):
     return render(request, 'pharmacy/index.html', {})
 
+def index_visitor(request):
+    return render(request, 'pharmacy/index_visitor.html', {})
+
 def add_to_basket(request):
     try:
         selected_product = get_object_or_404(Product,pk=request.POST['add_to_basket'])

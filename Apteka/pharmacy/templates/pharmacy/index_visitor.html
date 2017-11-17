@@ -1,0 +1,10 @@
+{% extends 'pharmacy/base_visitor.html' %}
+
+{% block title %}Hello{% endblock %}
+
+{% block body %}
+    {% if error_Message %}
+        <p><strong> You are not loged in </strong></p>
+    {% endif %}
+    WITAJ
+{% endblock %}
