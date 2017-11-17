@@ -6,6 +6,8 @@ app_name = 'pharmacy'
 urlpatterns = [
     #/pharmacy/
     url(r'^$', views.index, name='index'),
+    #/pharmacy/register
+    url(r'^register/$', views.UserFormView.as_view(), name='register'),
     # /pharmacy/visitor/
     url(r'^visitor/$', views.index_visitor, name='index_visitor'),
     #/pharmacy/products
