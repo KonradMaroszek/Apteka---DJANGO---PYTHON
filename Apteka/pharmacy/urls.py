@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^products/(?P<pk>[0-9]+)/$', views.ProductDetailView.as_view(), name='product_detail'),
     #pharmacy/add_to_basket
     url(r'^add_to_basket/$', views.add_to_basket, name='add_to_basket'),
-
+    #pharmacy/product/add
+    url(r'^product/add/$', views.CreateProduct.as_view(), name='add_product')
 ]

@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.core.exceptions import ObjectDoesNotExist
-
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
 
 class ProductDetailView(generic.DetailView):
     model = Product
@@ -26,3 +27,7 @@ def add_to_basket(request):
         return render(request, 'pharmacy/products.html', {'error_message' : "Cannot add this product to basket"})
     else:
         return render(request, 'pharmacy/basket.html', {'sucess_message': "Added new product to basket"})
+
+class CreateProduct(CreateView):
+    model = Product
+    fields = ['name', 'price', 'amount', 'product_logo', 'description']
