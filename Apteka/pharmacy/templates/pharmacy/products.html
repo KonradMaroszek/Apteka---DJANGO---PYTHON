@@ -10,7 +10,9 @@
                 <div class="col-sm-4 col-lg-2">
                     <div class="thumbnail">
                         <a href="{% url 'pharmacy:product_detail' product.id %}" >
-                            <img src="{{ product.product_logo }}" class="img-responsive">
+                            {% if product.product_logo %}
+                                <img src="{{ product.product_logo.url }}" class="img-responsive">
+                            {% endif %}
                         </a>
                         <div class="caption">
                             <h4>Name: &nbsp;{{ product.name }}</h4>

@@ -12,8 +12,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <a href="{% url 'pharmacy:product_detail' product.id %}">
-                            {% if product.product_logo %}
-                                <img src="{{ product.product_logo  }}" class="img-responsive">
+                             {% if product.product_logo%}
+                                <img src="{{ product.product_logo.url }}" class="img-responsive">
                             {% else %}
                                 <h3>No image to display</h3>
                             {% endif %}
