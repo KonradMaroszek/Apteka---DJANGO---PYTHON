@@ -105,3 +105,9 @@ body{
 .dropdown ul.dropdown-menu {
     width:170px;
 }
+
+.thumbnail {
+    position:relative
+    height: 100%;
+}
+
