@@ -97,3 +97,14 @@ body{
     background-color: #c0392b;
   }
 }
+
+.dropdown {
+    background:#c0392b;
+    width:170px;
+}
+.dropdown-menu>li>a {
+    color:#428bca;
+}
+.dropdown ul.dropdown-menu {
+    width:170px;
+}
