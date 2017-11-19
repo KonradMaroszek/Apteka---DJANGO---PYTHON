@@ -72,6 +72,6 @@ class UserFormView(View):
 
                 if user.is_active:
                     login(request, user)
-                    return redirect('pharmacy:index.html')
+                    return redirect('..')
 
         return render(request, self.template_name, {'form':form})
