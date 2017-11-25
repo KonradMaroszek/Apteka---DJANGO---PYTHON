@@ -20,7 +20,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{%url 'pharmacy:index_visitor' %}">PHARMACY</a>
+            <a class="navbar-brand" href="{%url 'pharmacy:index' %}">PHARMACY</a>
         </div>
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav navbar-right">
@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li class="">
-                      <a href="#">
+                      <a href="{% url 'pharmacy:sign_in' %}">
                         &nbsp;
                         Sign in
                     </a>

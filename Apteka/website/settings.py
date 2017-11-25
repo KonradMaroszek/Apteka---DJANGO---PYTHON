@@ -21,7 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'bgo6hxc@^br6_ji0@*m75$m5n@#!&=_*op$earu60@&tecp9t@'
-
+LOGIN_URL = 'pharmacy:sign_in'
+LOGIN_REDIRECT_URL = '/pharmacy/'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

@@ -20,6 +20,7 @@
                         </a>
                         <h3>Name: &nbsp;{{product.name}}</h3>
                         <h3>Price: &nbsp;{{product.price}}</h3>
+                        {% if has_change_product_permission %}
                         <form action="" method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="album_id" value="{{ album.id }}" />
@@ -35,10 +36,14 @@
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         </form>
+                        {% endif %}
+                        {% if has_add_to_basket_permission %}
                         <form action="{%url 'pharmacy:add_to_basket'%}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-default btn-sm" name="add_to_basket" value="{{product.id}}">Add to basket </button>
                         </form>
+                        {% endif %}
+                        {% if has_change_product_permission %}
                         <form action="{% url 'pharmacy:update_product' product.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="album_id" value="{{ album.id }}" />
@@ -46,6 +51,8 @@
                                 Edit
                             </button>
                         </form>
+                        {% endif %}
+                        {% if has_delete_product_permission %}
                         <form action="{% url 'pharmacy:delete_product' product.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="album_id" value="{{ album.id }}" />
@@ -53,6 +60,7 @@
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

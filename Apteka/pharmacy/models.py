@@ -1,7 +1,6 @@
-from django.db import models
-from django.core.validators import MinValueValidator
 from django.core.urlresolvers import reverse
-
+from django.core.validators import MinValueValidator
+from django.db import models
 
 
 class Product(models.Model):
@@ -9,11 +8,17 @@ class Product(models.Model):
     price = models.FloatField(validators=[MinValueValidator(0.0)])
     amount = models.IntegerField(default=0)
     product_logo = models.FileField()
-    description = models.TextField(default = "", max_length=9999)
+    description = models.TextField(default="", max_length=9999)
 
     def get_absolute_url(self):
         return reverse('pharmacy:product_detail', kwargs={'pk':self.pk})
 
     def __str__(self):
         return self.name
+
+
+class Basket(models.Model):
+    def get_absolute_url(self):
+        return reverse('pharmacy:basket', kwargs={'pk':self.pk})
+
 
