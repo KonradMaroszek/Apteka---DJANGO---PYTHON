@@ -37,7 +37,7 @@
                             </button>
                         </form>
                         {% endif %}
-                        {% if has_add_to_basket_permission %}
+                        {% if has_add_basket_permission %}
                         <form action="{%url 'pharmacy:add_to_basket'%}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-default btn-sm" name="add_to_basket" value="{{product.id}}">Add to basket </button>
