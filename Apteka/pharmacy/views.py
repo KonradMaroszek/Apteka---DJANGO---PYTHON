@@ -30,6 +30,11 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     model = Product
     template_name = 'pharmacy/product_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        context.update(get_permissions_to_be_passed_to_template(self.request))
+        return context
+
 
 @login_required()
 @permission_required('pharmacy.add_basket', 'pharmacy.delete_basket', 'pharmacy.change_basket')
