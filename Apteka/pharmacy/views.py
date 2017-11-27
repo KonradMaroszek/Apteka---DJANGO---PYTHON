@@ -12,6 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .forms import UserForm
 from .models import Product
+import ast
 
 
 def get_permissions_to_be_passed_to_template(request):
@@ -36,12 +37,6 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-@login_required()
-@permission_required('pharmacy.add_basket', 'pharmacy.delete_basket', 'pharmacy.change_basket')
-def basket_view(request):
-    return render(request, 'pharmacy/basket.html', get_permissions_to_be_passed_to_template(request))
-
-
 class AllProducts(LoginRequiredMixin, generic.ListView):
     template_name = 'pharmacy/products.html'
     context_object_name = 'all_products'
@@ -62,14 +57,69 @@ def index(request):
         return render(request, 'pharmacy/index_visitor.html', {})
 
 
+def get_basket_products(request, selected_product):
+    basket_products = {}  # id : basket_product
+    basket_product = {}  # id, name, price, amount, url, coupon
+    if 'basket_products' in request.COOKIES:
+        basket_products = ast.literal_eval(request.COOKIES['basket_products'])
+
+    if selected_product is not None and selected_product.id in basket_products:
+        basket_product = basket_products[selected_product.id]
+        action = request.POST.get('basket_product_op', '')
+        if action == 'minus':
+            basket_product['amount'] = basket_product['amount'] - 1
+        else:
+            basket_product['amount'] = basket_product['amount'] + 1
+    elif selected_product is not None:
+        basket_product = {'id': selected_product.id, 'name': selected_product.name, 'price': selected_product.price,
+                          'amount': 1, 'url': selected_product.product_logo.url, 'coupon' : 1.0}
+        basket_products[selected_product.id] = basket_product
+
+    return basket_products
+
+def get_basket_price(basket_products):
+    price = 0.0
+    for basket_product in basket_products.values():
+        price = price + (float(basket_product['amount']) * float(basket_product['price']) * float(basket_product['coupon']))
+    return price
+
+@login_required()
+@permission_required('pharmacy.add_basket', 'pharmacy.delete_basket', 'pharmacy.change_basket')
+def basket_view(request):
+    basket_products = get_basket_products(request, None)
+    price = get_basket_price(basket_products)
+    #return render(request, 'pharmacy/basket.html', get_permissions_to_be_passed_to_template(request))
+    return render(request, 'pharmacy/basket.html', {'basket_products' : basket_products, 'basket_price' : price})
+
 @login_required()
 def add_to_basket(request):
-    try:
-        selected_product = get_object_or_404(Product, pk=request.POST['add_to_basket'])
-    except (KeyError, ObjectDoesNotExist):
-        return render(request, 'pharmacy/products.html', {'error_message': "Cannot add this product to basket"})
+    coupon = request.POST.get('basket_coupon', '')
+    if (coupon is not ''):
+        basket_products = get_basket_products(request, None)
+        discount = 1.0
+        if (coupon == 'I WANT 20 DISCOUNT'):
+           discount = 0.8
+        elif (coupon == 'I WANT 40 DISCOUNT'):
+            discount = 0.6
+        elif (coupon == 'I WANT 60 DISCOUNT'):
+            discount = 0.4
+        for basket_product in basket_products.values():
+            basket_product['coupon'] = discount
+        price = get_basket_price(basket_products)
+        response = render(request, 'pharmacy/basket.html', {'sucess_message': "Updated basket", 'basket_products': basket_products, 'basket_price': price})
+        response.set_cookie('basket_products', basket_products)
+        return response
     else:
-        return render(request, 'pharmacy/basket.html', {'sucess_message': "Added new product to basket"})
+        try:
+            selected_product = get_object_or_404(Product, pk=request.POST['add_to_basket'])
+        except (KeyError, ObjectDoesNotExist):
+            return render(request, 'pharmacy/products.html', {'error_message': "Cannot add this product to basket"})
+        else:
+            basket_products = get_basket_products(request, selected_product)
+            price = get_basket_price(basket_products)
+            response = render(request, 'pharmacy/basket.html', {'sucess_message': "Updated basket", 'basket_products' : basket_products, 'basket_price' : price})
+            response.set_cookie('basket_products', basket_products)
+            return response
 
 
 class CreateProduct(PermissionRequiredMixin, LoginRequiredMixin, CreateView):

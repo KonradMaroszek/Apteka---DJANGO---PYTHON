@@ -4,4 +4,64 @@
     {%if sucess_message%}
         <h1>{{sucess_message}}</h1>
     {%endif%}
+
+    {% if basket_products %}
+        {% for basket_product in basket_products.values %}
+            <div class="col-sm-4 col-lg-2">
+                <div class="thumbnail">
+                    <a href="{% url 'pharmacy:product_detail' basket_product.id %}" >
+                        {% if basket_product.url %}
+                            <img src="{{ basket_product.url }}" class="img-responsive">
+                        {% endif %}
+                    </a>
+                    <div class="caption">
+                        <h4>Name: &nbsp;{{ basket_product.name }}</h4>
+                        <h4>Price: &nbsp;{{ basket_product.price }}</h4>
+                        <h4 style="display: inline;">Amount: </h4>
+                        <form action="{%url 'pharmacy:add_to_basket'%}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="basket_product_op" value="minus" />
+                            <button type="submit" class="btn btn-default btn-sm" name="add_to_basket" value="{{basket_product.id}}">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </form>
+                        <h4 style="display: inline;">{{ basket_product.amount }}</h4>
+                        <form action="{%url 'pharmacy:add_to_basket'%}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="basket_product_op" value="plus" />
+                            <button type="submit" class="btn btn-default btn-sm" name="add_to_basket" value="{{basket_product.id}}">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </form>
+                        <a href="{% url 'pharmacy:product_detail' basket_product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                        {% if has_change_product_permission %}
+                        <a href="{% url 'pharmacy:update_product' basket_product.id %}" class="btn btn-primary btn-sm" role="button">Edit</a>
+                        {% endif %}
+                        {% if has_delete_product_permission %}
+                        <form action="{% url 'pharmacy:delete_product' basket_product.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="album_id" value="{{ album.id }}" />
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+        {% endfor %}
+        <br>
+        <h4>Price: {{ basket_price }}</h4>
+        <br>
+        <form action="{%url 'pharmacy:add_to_basket'%}" method="post" style="display: inline;">
+            {% csrf_token %}
+            Coupon: <input type="text" name="basket_coupon">
+            <button type="submit" class="btn btn-default btn-sm" name="add_to_basket" value="coupon">
+                Check coupon
+            </button>
+        </form>
+    {% else %}
+        <h3>No products to display</h3>
+    {% endif %}
 {% endblock %}
