@@ -12,8 +12,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .forms import UserForm
 from .models import Product
+from .models import History
 import ast
-
+import hashlib
+import time
 
 def get_permissions_to_be_passed_to_template(request):
     return {'has_{}_permission'.format(perm.split('.')[1]): request.user.has_perm(perm)
@@ -121,6 +123,29 @@ def add_to_basket(request):
             response.set_cookie('basket_products', basket_products)
             return response
 
+@login_required()
+def pay_view(request):
+    basket_products = get_basket_products(request, None)
+    price = get_basket_price(basket_products)
+    number = int((hashlib.md5(str(time.time()).encode())).hexdigest(), 16)
+    number = number % 100000000
+    return render(request, 'pharmacy/pay.html', {'price' : price, 'number' : number})
+
+@login_required()
+def add_pay_view(request):
+    history_order = request.POST.get('number', 0)
+    history_basket = get_basket_products(request, None)
+    history_price = get_basket_price(history_basket)
+    History.objects.create(user=request.user, order=history_order, price=history_price, status='Waiting for approval', basket=history_basket)
+    response = render(request, 'pharmacy/index.html')
+    response.delete_cookie('basket_products')
+    return response
+
+def history_view(request):
+    history = History.objects.filter(user=request.user)
+    for entry in history:
+        entry.basket = ast.literal_eval(entry.basket)
+    return render(request, 'pharmacy/history.html', {'history' : history})
 
 class CreateProduct(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = 'pharmacy.add_product'

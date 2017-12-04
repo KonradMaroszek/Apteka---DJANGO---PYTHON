@@ -26,4 +26,9 @@ urlpatterns = [
 
     url(r'^product/delete/(?P<pk>[0-9]+)/$', views.DeleteProduct.as_view(), name='delete_product'),
 
+    url(r'^pay/$', views.pay_view, name='pay'),
+
+    url(r'^add_pay/$', views.add_pay_view, name='add_pay'),
+
+    url(r'^history/$', views.history_view, name='history'),
 ]

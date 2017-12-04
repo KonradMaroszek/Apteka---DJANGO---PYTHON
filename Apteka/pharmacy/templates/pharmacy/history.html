@@ -1,0 +1,32 @@
+{% extends 'pharmacy/base.html' %}
+
+{% block body %}
+    {% if history %}
+        Order number    Price       Status      Items<br><br>
+        {% for entry in history %}
+            {{entry.order}}   {{entry.price}}   {{entry.status}}
+            <br>
+            Items: <br>
+            {% for basket_product in entry.basket.values %}
+                <div class="col-sm-4 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{% url 'pharmacy:product_detail' basket_product.id %}" >
+                            {% if basket_product.url %}
+                                <img src="{{ basket_product.url }}" class="img-responsive">
+                            {% endif %}
+                        </a>
+                        <div class="caption">
+                            <h4>Name: &nbsp;{{ basket_product.name }}</h4>
+                            <h4>Price: &nbsp;{{ basket_product.price }}</h4>
+                            <h4 style="display: inline;">Amount: </h4>
+                            <h4 style="display: inline;">{{ basket_product.amount }}</h4>
+                            <a href="{% url 'pharmacy:product_detail' basket_product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+            {% endfor %}
+            <br><br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

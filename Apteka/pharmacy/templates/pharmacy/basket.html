@@ -61,6 +61,13 @@
                 Check coupon
             </button>
         </form>
+        <br>
+        <form action="{%url 'pharmacy:pay'%}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default btn-sm" name="pay">
+                Pay
+            </button>
+        </form>
     {% else %}
         <h3>No products to display</h3>
     {% endif %}

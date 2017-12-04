@@ -21,4 +21,13 @@ class Basket(models.Model):
     def get_absolute_url(self):
         return reverse('pharmacy:basket', kwargs={'pk':self.pk})
 
+class History(models.Model):
+    user = models.CharField(max_length=100)
+    order = models.BigIntegerField()
+    price = models.FloatField()
+    status = models.CharField(max_length=100)
+    basket = models.TextField(max_length=9999)
+
+    def get_absolute_url(self):
+        return reverse('pharmacy:history', kwargs={'pk':self.pk})
 
