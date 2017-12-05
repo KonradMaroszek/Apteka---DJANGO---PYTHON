@@ -2,8 +2,8 @@
 
 {% block body %}
     {% if price and number %}
-        Number: {{ number }} <br>
-        Price: {{ price }} <br>
+        <h4>Number: {{ number }}</h4>
+        <h4>Price: {{ price }} </h4>
         <form action="{%url 'pharmacy:add_pay'%}" method="post" style="display: inline;">
             {% csrf_token %}
             <input type="hidden" name="number" value="{{number}}" />
