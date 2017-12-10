@@ -39,7 +39,11 @@
                             </a>
                             <div class="caption">
                                 <h4>Name: &nbsp;{{ basket_product.name }}</h4>
-                                <h4>Price: &nbsp;{{ basket_product.price }}</h4>
+                                {% if basket_product.discount > 0 %}
+                                    <h4>Price: &nbsp;<del>{{ basket_product.price }}</del> {{ basket_product.discount_price }}</h4>
+                                {% else %}
+                                    <h4>Price: &nbsp;{{ basket_product.discount_price }}</h4>
+                                {% endif %}
                                 <h4 style="display: inline;">Amount: </h4>
                                 <h4 style="display: inline;">{{ basket_product.amount }}</h4>
                                 <a href="{% url 'pharmacy:product_detail' basket_product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>

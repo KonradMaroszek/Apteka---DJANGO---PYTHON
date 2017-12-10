@@ -31,4 +31,6 @@ urlpatterns = [
     url(r'^add_pay/$', views.add_pay_view, name='add_pay'),
 
     url(r'^history/$', views.history_view, name='history'),
+
+    url(r'^sale/$', views.sale_view, name='sale'),
 ]

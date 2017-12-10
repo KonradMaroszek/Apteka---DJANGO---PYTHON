@@ -6,6 +6,7 @@
     {% if error_Message %}
         <p><strong> You are not loged in </strong></p>
     {% endif %}
+    {% if product %}
     <div class="container-fluid songs-container">
         <div class="row">
             <div class="col-sm-4 col-md-3">
@@ -19,7 +20,11 @@
                             {% endif %}
                         </a>
                         <h3>Name: &nbsp;{{product.name}}</h3>
-                        <h3>Price: &nbsp;{{product.price}}</h3>
+                        {% if product.discount > 0 %}
+                            <h3>Price: &nbsp;<del>{{ product.price }}</del> {{ product.discount_price }}</h3>
+                        {% else %}
+                            <h3>Price: &nbsp;{{ product.discount_price }}</h3>
+                        {% endif %}
                         {% if has_change_product_permission %}
                         <form action="" method="post" style="display: inline;">
                             {% csrf_token %}
@@ -74,4 +79,5 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}

@@ -36,6 +36,8 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         context.update(get_permissions_to_be_passed_to_template(self.request))
+        product = context['product']
+        product.discount_price = float((100 - int(product.discount)) / 100.0 * float(product.price))
         return context
 
 
@@ -44,7 +46,10 @@ class AllProducts(LoginRequiredMixin, generic.ListView):
     context_object_name = 'all_products'
 
     def get_queryset(self):
-        return Product.objects.all()
+        products = Product.objects.all()
+        for product in products:
+            product.discount_price = float((100 - int(product.discount)) / 100.0 * float(product.price))
+        return products
 
     def get_context_data(self, **kwargs):
         context = super(AllProducts, self).get_context_data(**kwargs)
@@ -73,8 +78,8 @@ def get_basket_products(request, selected_product):
         else:
             basket_product['amount'] = basket_product['amount'] + 1
     elif selected_product is not None:
-        basket_product = {'id': selected_product.id, 'name': selected_product.name, 'price': selected_product.price,
-                          'amount': 1, 'url': selected_product.product_logo.url, 'coupon' : 1.0}
+        basket_product = {'id': selected_product.id, 'name': selected_product.name, 'price': selected_product.price, 'discount': selected_product.discount,
+                          'discount_price': float((100 - int(selected_product.discount)) / 100.0 * float(selected_product.price)), 'amount': 1, 'url': selected_product.product_logo.url, 'coupon' : 1.0}
         basket_products[selected_product.id] = basket_product
 
     return basket_products
@@ -82,7 +87,7 @@ def get_basket_products(request, selected_product):
 def get_basket_price(basket_products):
     price = 0.0
     for basket_product in basket_products.values():
-        price = price + (float(basket_product['amount']) * float(basket_product['price']) * float(basket_product['coupon']))
+        price = price + (float(basket_product['amount']) * float(basket_product['discount_price']) * float(basket_product['coupon']))
     return price
 
 @login_required()
@@ -141,6 +146,14 @@ def add_pay_view(request):
     response.delete_cookie('basket_products')
     return response
 
+@login_required()
+def sale_view(request):
+    products = Product.objects.all()
+    for product in products:
+        product.discount_price = float((100 - int(product.discount)) / 100.0 * float(product.price))
+    return render(request, 'pharmacy/sale.html', {'all_products': products})
+
+@login_required()
 def history_view(request):
     history = History.objects.filter(user=request.user)
     for entry in history:
@@ -151,7 +164,7 @@ class CreateProduct(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = 'pharmacy.add_product'
     raise_exception = True
     model = Product
-    fields = ['name', 'price', 'amount', 'product_logo', 'description']
+    fields = ['name', 'price', 'amount', 'product_logo', 'description', 'discount']
 
 
 @login_required()
@@ -164,7 +177,7 @@ class UpdateProduct(PermissionRequiredMixin, UpdateView):
     permission_required = 'pharmacy.change_product'
     raise_exception = True
     model = Product
-    fields = ['name', 'price', 'amount', 'product_logo', 'description']
+    fields = ['name', 'price', 'amount', 'product_logo', 'description', 'discount']
 
 
 class DeleteProduct(PermissionRequiredMixin, DeleteView):

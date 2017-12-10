@@ -7,6 +7,7 @@
     {% endif %}
     {% if all_products %}
             {% for product in all_products %}
+                {% if product.discount > 0 %}
                 <div class="col-sm-4 col-lg-2">
                     <div class="thumbnail">
                         <a href="{% url 'pharmacy:product_detail' product.id %}" >
@@ -16,11 +17,7 @@
                         </a>
                         <div class="caption">
                             <h4>Name: &nbsp;{{ product.name }}</h4>
-                            {% if product.discount > 0 %}
-                                <h4>Price: &nbsp;<del>{{ product.price }}</del> {{ product.discount_price }}</h4>
-                            {% else %}
-                                <h4>Price: &nbsp;{{ product.discount_price }}</h4>
-                            {% endif %}
+                            <h4>Price: &nbsp;<del>{{ product.price }}</del> {{ product.discount_price }}</h4>
                             <a href="{% url 'pharmacy:product_detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
                             {% if has_change_product_permission %}
                             <a href="{% url 'pharmacy:update_product' product.id %}" class="btn btn-primary btn-sm" role="button">Edit</a>
@@ -37,6 +34,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
             {% endfor %}
     {% else %}

@@ -9,6 +9,7 @@ class Product(models.Model):
     amount = models.IntegerField(default=0)
     product_logo = models.FileField()
     description = models.TextField(default="", max_length=9999)
+    discount = models.IntegerField(default=0)
 
     def get_absolute_url(self):
         return reverse('pharmacy:product_detail', kwargs={'pk':self.pk})
