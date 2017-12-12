@@ -74,7 +74,8 @@ def get_basket_products(request, selected_product):
         basket_product = basket_products[selected_product.id]
         action = request.POST.get('basket_product_op', '')
         if action == 'minus':
-            basket_product['amount'] = basket_product['amount'] - 1
+            if basket_product['amount'] > 0:
+                basket_product['amount'] = basket_product['amount'] - 1
         else:
             basket_product['amount'] = basket_product['amount'] + 1
     elif selected_product is not None:
@@ -88,6 +89,14 @@ def get_basket_price(basket_products):
     price = 0.0
     for basket_product in basket_products.values():
         price = price + (float(basket_product['amount']) * float(basket_product['discount_price']) * float(basket_product['coupon']))
+
+    if price >= 200:
+        price = price * 0.85
+    elif price >= 100:
+        price = price * 0.9
+    elif price >= 50:
+        price = price * 0.95
+
     return price
 
 @login_required()
