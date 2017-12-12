@@ -74,7 +74,9 @@ def get_basket_products(request, selected_product):
         basket_product = basket_products[selected_product.id]
         action = request.POST.get('basket_product_op', '')
         if action == 'minus':
-            if basket_product['amount'] > 0:
+            if basket_product['amount'] == 1:
+                del basket_products[selected_product.id]
+            elif basket_product['amount'] > 0:
                 basket_product['amount'] = basket_product['amount'] - 1
         else:
             basket_product['amount'] = basket_product['amount'] + 1
@@ -150,7 +152,7 @@ def add_pay_view(request):
     history_order = request.POST.get('number', 0)
     history_basket = get_basket_products(request, None)
     history_price = get_basket_price(history_basket)
-    History.objects.create(user=request.user, order=history_order, price=history_price, status='Waiting for approval', basket=history_basket)
+    History.objects.create(user=request.user, order=history_order, price=history_price, status='Order in execution', basket=history_basket)
     response = render(request, 'pharmacy/index.html')
     response.delete_cookie('basket_products')
     return response
@@ -164,10 +166,35 @@ def sale_view(request):
 
 @login_required()
 def history_view(request):
-    history = History.objects.filter(user=request.user)
+    history = History.objects.filter(user=request.user, status='Done')
     for entry in history:
         entry.basket = ast.literal_eval(entry.basket)
     return render(request, 'pharmacy/history.html', {'history' : history})
+
+
+@login_required()
+def history_execution_view(request):
+    history = History.objects.filter(user=request.user, status='Order in execution')
+    for entry in history:
+        entry.basket = ast.literal_eval(entry.basket)
+    return render(request, 'pharmacy/history.html', {'history' : history})
+
+
+@login_required()
+def history_status_view(request):
+    history = History.objects.filter(status='Order in execution')
+    for entry in history:
+        entry.basket = ast.literal_eval(entry.basket)
+    return render(request, 'pharmacy/history_status.html', {'history' : history})
+
+
+@login_required()
+def history_status_change_view(request):
+    History.objects.filter(order=request.POST.get('order', 0)).update(status='Done')
+    history = History.objects.filter(status='Order in execution')
+    for entry in history:
+        entry.basket = ast.literal_eval(entry.basket)
+    return render(request, 'pharmacy/history_status.html', {'history' : history, 'message' : 'Status updated'})
 
 class CreateProduct(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = 'pharmacy.add_product'

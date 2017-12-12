@@ -32,5 +32,11 @@ urlpatterns = [
 
     url(r'^history/$', views.history_view, name='history'),
 
+    url(r'^history_execution/$', views.history_execution_view, name='history_execution'),
+
+    url(r'^history_status/$', views.history_status_view, name='history_status'),
+
+    url(r'^history_status_change/$', views.history_status_change_view, name='history_status_change'),
+
     url(r'^sale/$', views.sale_view, name='sale'),
 ]

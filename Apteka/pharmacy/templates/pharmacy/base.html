@@ -87,12 +87,21 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{% url 'pharmacy:history_execution' %}">
                                     Order in execution
                                     &nbsp;
                                     <span class="badge">1</span>
                                 </a>
                             </li>
+                            {% if user.is_superuser %}
+                            <li>
+                                <a href="{% url 'pharmacy:history_status' %}">
+                                    Orders
+                                    &nbsp;
+                                    <span class="glyphicon glyphicon-stats"></span>
+                                </a>
+                            </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'pharmacy:logout' %}">
                                     Sign Out
