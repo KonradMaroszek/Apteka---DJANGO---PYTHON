@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.models import Group
 
 from .forms import UserForm
 from .models import Product
@@ -246,8 +247,9 @@ class UserFormView(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user.set_password(password)
-            user.groups.set('pharmacy.client')
             user.save()
+            client_group = Group.objects.get(name='pharmacy.client')
+            client_group.user_set.add(user)
 
             user = authenticate(username=username, password=password)
 
