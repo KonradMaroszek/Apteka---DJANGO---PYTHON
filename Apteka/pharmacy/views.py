@@ -141,7 +141,12 @@ def add_to_basket(request):
         try:
             selected_product = get_object_or_404(Product, pk=request.POST['add_to_basket'])
         except (KeyError, ObjectDoesNotExist):
-            return render(request, 'pharmacy/products.html', {'error_message': "Cannot add this product to basket"})
+
+            context = {'error_message': "Cannot add this product to basket"}
+            permissions = get_permissions_to_be_passed_to_template(request)
+            context.update(permissions)
+
+            return render(request, 'pharmacy/products.html', context)
         else:
             basket_products = get_basket_products(request, selected_product)
             price = get_basket_price(basket_products)
@@ -173,7 +178,7 @@ def add_pay_view(request):
     history_basket = get_basket_products(request, None)
     history_price = get_basket_price(history_basket)
     History.objects.create(user=request.user, order=history_order, price=history_price, status='Order in execution', basket=history_basket)
-    response = render(request, 'pharmacy/index.html')
+    response = render(request, 'pharmacy/index.html', get_permissions_to_be_passed_to_template(request))
     response.delete_cookie('basket_products')
     return response
 
