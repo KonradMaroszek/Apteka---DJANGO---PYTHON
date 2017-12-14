@@ -107,8 +107,12 @@ def get_basket_price(basket_products):
 def basket_view(request):
     basket_products = get_basket_products(request, None)
     price = get_basket_price(basket_products)
-    #return render(request, 'pharmacy/basket.html', get_permissions_to_be_passed_to_template(request))
-    return render(request, 'pharmacy/basket.html', {'basket_products' : basket_products, 'basket_price' : price})
+
+    context = {'basket_products' : basket_products, 'basket_price' : price}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/basket.html', context)
 
 @login_required()
 def add_to_basket(request):
@@ -125,7 +129,12 @@ def add_to_basket(request):
         for basket_product in basket_products.values():
             basket_product['coupon'] = discount
         price = get_basket_price(basket_products)
-        response = render(request, 'pharmacy/basket.html', {'sucess_message': "Updated basket", 'basket_products': basket_products, 'basket_price': price})
+
+        context = {'sucess_message': "Updated basket", 'basket_products': basket_products, 'basket_price': price}
+        permissions = get_permissions_to_be_passed_to_template(request)
+        context.update(permissions)
+
+        response = render(request, 'pharmacy/basket.html', context)
         response.set_cookie('basket_products', basket_products)
         return response
     else:
@@ -136,7 +145,12 @@ def add_to_basket(request):
         else:
             basket_products = get_basket_products(request, selected_product)
             price = get_basket_price(basket_products)
-            response = render(request, 'pharmacy/basket.html', {'sucess_message': "Updated basket", 'basket_products' : basket_products, 'basket_price' : price})
+
+            context = {'sucess_message': "Updated basket", 'basket_products' : basket_products, 'basket_price' : price}
+            permissions = get_permissions_to_be_passed_to_template(request)
+            context.update(permissions)
+
+            response = render(request, 'pharmacy/basket.html', context)
             response.set_cookie('basket_products', basket_products)
             return response
 
@@ -146,7 +160,12 @@ def pay_view(request):
     price = get_basket_price(basket_products)
     number = int((hashlib.md5(str(time.time()).encode())).hexdigest(), 16)
     number = number % 100000000
-    return render(request, 'pharmacy/pay.html', {'price' : price, 'number' : number})
+
+    context = {'price' : price, 'number' : number}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/pay.html', context)
 
 @login_required()
 def add_pay_view(request):
@@ -163,14 +182,24 @@ def sale_view(request):
     products = Product.objects.all()
     for product in products:
         product.discount_price = float((100 - int(product.discount)) / 100.0 * float(product.price))
-    return render(request, 'pharmacy/sale.html', {'all_products': products})
+
+    context = {'all_products': products}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/sale.html', context)
 
 @login_required()
 def history_view(request):
     history = History.objects.filter(user=request.user, status='Done')
     for entry in history:
         entry.basket = ast.literal_eval(entry.basket)
-    return render(request, 'pharmacy/history.html', {'history' : history})
+
+    context = {'history' : history}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/history.html', context)
 
 
 @login_required()
@@ -178,7 +207,12 @@ def history_execution_view(request):
     history = History.objects.filter(user=request.user, status='Order in execution')
     for entry in history:
         entry.basket = ast.literal_eval(entry.basket)
-    return render(request, 'pharmacy/history.html', {'history' : history})
+
+    context = {'history' : history}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/history.html', context)
 
 
 @login_required()
@@ -186,7 +220,12 @@ def history_status_view(request):
     history = History.objects.filter(status='Order in execution')
     for entry in history:
         entry.basket = ast.literal_eval(entry.basket)
-    return render(request, 'pharmacy/history_status.html', {'history' : history})
+
+    context = {'history' : history}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/history_status.html', context)
 
 
 @login_required()
@@ -195,7 +234,12 @@ def history_status_change_view(request):
     history = History.objects.filter(status='Order in execution')
     for entry in history:
         entry.basket = ast.literal_eval(entry.basket)
-    return render(request, 'pharmacy/history_status.html', {'history' : history, 'message' : 'Status updated'})
+
+    context = {'history' : history, 'message' : 'Status updated'}
+    permissions = get_permissions_to_be_passed_to_template(request)
+    context.update(permissions)
+
+    return render(request, 'pharmacy/history_status.html', context)
 
 class CreateProduct(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = 'pharmacy.add_product'
